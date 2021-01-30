@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo&display=swap" rel="stylesheet">
+     <link rel="stylesheet"
+        href="../codemirror/lib/codemirror.css">
+    </link>
+    <link rel='stylesheet' href='./themes/atomOne.css'>
+    <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
+    <script src="../codemirror/lib/codemirror.js"></script>
+    <script src="../codemirror/mode/javascript/javascript.js"></script>
+    <script src="../codemirror/mode/python/python.js"></script>
+    <link rel="stylesheet" href="./styles.css">
+    <script>
+        const data = <%- JSON.stringify(data) %>;
+    </script>
+  </head>
+  <body>
+    <div id="wrapper">
+        <div id="container">
+            <div id="sidebar">
+              <div class="storageHeader">
+                <h2>Storage</h2>
+              </div>
+                <div class="sidebarPath"></div>
+                <div class="activeItemIdencticator hidden"></div>
+                <div class="sideBarDataList"></div>
+                <button class="sideBarBtn" onclick="createNewDir()">New Folder</button>
+                <button class="sideBarBtn" onclick="renameFolder()">Rename This Folder</button>
+                <button class="sideBarBtn" onclick="createNewFile()">New File</button>
+                <button class="sideBarBtn" onclick="deleteFolder()">Delete This Folder</button>
+              </div>
+            <div id="resizer"></div>
+            <div id="main">
+              <div class="fileNavBar">
+                <h2 class="codeEditorHeaderName"></h2>
+                <div class="rightFileNavBar">
+                  <div class="fileNavBarBtn renameBtn" onclick="renameFile()">Rename</div>
+                  <div class="fileNavBarBtn deleteBtn" onclick="deleteFile()">Delete</div>
+                </div>
+              </div>
+                <textarea class="editor split"></textarea>
+            </div>
+            <div id="resizer2"></div>
+
+            <div class="rightSidebar">
+              <div class="consoleBtns">
+                <button onclick="saveFile()" class="consoleBtn">Save File</button>
+                <button onclick="runScript()" class="consoleBtn runBtn">Run File</button>
+              </div>
+                <div class="consoleHeader">
+                  <span>Console Output</span>
+                  <svg onclick="clearConsole()" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+width="24" height="24"
+viewBox="0 0 172 172"
+style=" fill:#000000;">
+
+<g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path d="M0,172v-172h172v172z" fill="none"></path><g fill="#ffffff"><path d="M71.66667,14.33333l-7.16667,7.16667h-35.83333v14.33333h114.66667v-14.33333h-35.83333l-7.16667,-7.16667zM35.83333,50.16667v107.5h100.33333v-107.5zM67.43945,71.66667l18.56055,18.56055l18.56055,-18.56055l10.10612,10.10612l-18.56055,18.56055l18.56055,18.56055l-10.10612,10.10612l-18.56055,-18.56055l-18.56055,18.56055l-10.10612,-10.10612l18.56055,-18.56055l-18.56055,-18.56055z"></path></g></g></svg>
+                </span>
+              </div>
+                <div class="consoleWrapper">
+                  <div class="consoleInner">
+                  </div>
+                </div>
+        </div>
+      </div>
+
+      <div class="newFileContainer hidden">
+        <h1>New File</h1>
+        <form class="newFileForm">  
+          <div class="checkBoxesWrapper">
+            <div class="checkBoxContainer">
+              <input type="checkbox" id="Check1" checked value="py" onclick="selectOnlyThis(this.id, this)" /> Python
+            </div>
+            <div class="checkBoxContainer">
+              <input type="checkbox" id="Check2" value="js" onclick="selectOnlyThis(this.id, this)" /> Javascript
+            </div>
+          </div>
+          <div class="inputWrapper">
+
+            <input maxlength="30" value="Name" type="text" name="newFileName" class="newFileName">
+            <div class="labels">
+
+              <label class="newFileNameLabel">Name</label>
+              <label class="newFileExt">.py</label>
+            </div>
+          </div>
+          <button class="submitBtn" type="submit">Create File</button>
+        </form>
+      </div>
+  </body>
+  <template class="consoleMsgTmp">
+    <div class="consoleMsg">
+      <p class="consoleMsgPath"></p>
+      <p class="consoleMsgContent"></p>
+    </div>
+  </template>
+  <template class="sideBarFolderTemp">
+    <div class="sideBarItem">
+      <div class="folderIcon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          x="0px"
+          y="0px"
+          width="48"
+          height="48"
+          viewBox="0 0 172 172"
+          style="fill: #000000"
+        >
+          <g
+            fill="none"
+            fill-rule="nonzero"
+            stroke="none"
+            stroke-width="1"
+            stroke-linecap="butt"
+            stroke-linejoin="miter"
+            stroke-miterlimit="10"
+            stroke-dasharray=""
+            stroke-dashoffset="0"
+            font-family="none"
+            font-weight="none"
+            font-size="none"
+            text-anchor="none"
+            style="mix-blend-mode: normal"
+          >
+            <path d="M0,172v-172h172v172z" fill="none"></path>
+            <g>
+              <path
+                d="M143.33333,43h-64.5l-14.33333,-14.33333h-35.83333c-7.88333,0 -14.33333,6.45 -14.33333,14.33333v28.66667h143.33333v-14.33333c0,-7.88333 -6.45,-14.33333 -14.33333,-14.33333z"
+                fill="#ffa000"
+              ></path>
+              <path
+                d="M143.33333,43h-114.66667c-7.88333,0 -14.33333,6.45 -14.33333,14.33333v71.66667c0,7.88333 6.45,14.33333 14.33333,14.33333h114.66667c7.88333,0 14.33333,-6.45 14.33333,-14.33333v-71.66667c0,-7.88333 -6.45,-14.33333 -14.33333,-14.33333z"
+                fill="#ffca28"
+              ></path>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="sideBarFolderName">folder</div>
+    </div>
+  </template>
+  <template class="sideBarFileTemp">
+    <div class="sideBarItem">
+      <div class="fileIcon">
+        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+width="30" height="30"
+viewBox="0 0 172 172"
+style=" fill:#000000;"><g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path d="M0,172v-172h172v172z" fill="none"></path><g fill="#ffffff"><path d="M141.65347,50.4132l-37.26667,-37.26667c-1.07787,-1.07787 -2.53413,-1.67987 -4.05347,-1.67987h-60.2c-6.33533,0 -11.46667,5.13133 -11.46667,11.46667v126.13333c0,6.33533 5.13133,11.46667 11.46667,11.46667h91.73333c6.33533,0 11.46667,-5.13133 11.46667,-11.46667v-94.6c0,-1.51933 -0.602,-2.9756 -1.67987,-4.05347zM103.2,57.33333c-3.1648,0 -5.73333,-2.56853 -5.73333,-5.73333v-29.21707l34.9504,34.9504z"></path></g></g></svg>
+      </div>
+      <div class="sideBarFolderName">folder</div>
+    </div>
+  </template>
+  <template class="arrowTemp">
+    <span class="pathArrow">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        x="0px"
+        y="0px"
+        width="24"
+        height="24"
+        viewBox="0 0 172 172"
+        style="fill: #000000"
+      >
+        <g
+          fill="none"
+          fill-rule="nonzero"
+          stroke="none"
+          stroke-width="1"
+          stroke-linecap="butt"
+          stroke-linejoin="miter"
+          stroke-miterlimit="10"
+          stroke-dasharray=""
+          stroke-dashoffset="0"
+          font-family="none"
+          font-weight="none"
+          font-size="none"
+          text-anchor="none"
+          style="mix-blend-mode: normal"
+        >
+          <path d="M0,172v-172h172v172z" fill="none"></path>
+          <g fill="#000000">
+            <path
+              d="M68.37,28.595l-9.7825,9.7825l47.73,47.6225l-47.73,47.73l9.675,9.675l52.5675,-52.5675l4.945,-4.8375l-4.945,-4.8375z"
+            ></path>
+          </g>
+        </g>
+      </svg>
+    </span>
+  </template>
+  <template class="sideBarRootBtn">
+    <span class="sideBarRootIcon">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        x="0px"
+        y="0px"
+        width="24"
+        height="24"
+        viewBox="0 0 172 172"
+        style="fill: #000000"
+      >
+        <g
+          fill="none"
+          fill-rule="nonzero"
+          stroke="none"
+          stroke-width="1"
+          stroke-linecap="butt"
+          stroke-linejoin="miter"
+          stroke-miterlimit="10"
+          stroke-dasharray=""
+          stroke-dashoffset="0"
+          font-family="none"
+          font-weight="none"
+          font-size="none"
+          text-anchor="none"
+          style="mix-blend-mode: normal"
+        >
+          <path d="M0,172v-172h172v172z" fill="none"></path>
+          <g fill="#ffffff">
+            <path
+              d="M132.59733,21.76595l-65.21387,64.24805l65.5638,64.23405l10.02214,-10.2461l-55.13575,-54.01595l54.81381,-54.00195zM90.77311,21.82194l-63.78614,64.13607l62.84831,64.17806l10.2461,-10.02214l-52.95215,-54.07194l53.80599,-54.11393z"
+            ></path>
+          </g>
+        </g>
+      </svg>
+    </span>
+  </template>
+  <script src="./home.js"></script>
+  <script  src="./script.js"></script>
+</html>

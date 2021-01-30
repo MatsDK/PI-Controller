@@ -1,0 +1,488 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Heebo", sans-serif;
+}
+body {
+  height: 100vh;
+  width: 100vw;
+  color: #fff;
+  display: flex;
+}
+.CodeMirror {
+  height: 100%;
+  width: 100%;
+  font-size: 16px;
+  margin-top: 50px;
+  z-index: 0;
+}
+#sidebar {
+  overflow: hidden;
+  width: 300px;
+  height: 100%;
+  min-width: 200px;
+  max-width: 750px;
+  z-index: 3;
+  background-color: #21252b;
+}
+
+#wrapper {
+  flex-direction: column;
+  overflow: hidden;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+#resizer,
+#resizer2 {
+  width: 10px;
+  height: 100%;
+  background-color: #21252b;
+  box-shadow: 2px 1px 10px rgba(0, 0, 0, 0.425);
+
+  cursor: col-resize;
+  z-index: 2;
+}
+
+#resizer2 {
+  z-index: 1;
+}
+#main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+}
+
+#container {
+  height: 100%;
+  display: flex;
+}
+
+.rightSidebar {
+  background-color: #21252b;
+  z-index: 2;
+  width: 500px;
+  min-width: 450px;
+  max-width: 1000px;
+  -webkit-user-select: none;
+}
+
+.CodeMirror-vscrollbar {
+  margin-right: 10px;
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb:vertical:active {
+  border-radius: 100px;
+  background-color: #434c579c;
+}
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb:vertical {
+  border-radius: 100px;
+  background-color: #2f353d;
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar {
+  transition: 0.2s ease;
+  width: 8px; /* 1px wider than Lion. */
+  border-radius: 100px;
+}
+
+.consoleInner {
+  margin-right: 10px;
+}
+
+.consoleInner::-webkit-scrollbar-thumb:vertical:active {
+  border-radius: 100px;
+  background-color: #434c579c;
+}
+.consoleInner::-webkit-scrollbar-thumb:vertical {
+  border-radius: 100px;
+  background-color: #2f353d;
+}
+
+.consoleInner::-webkit-scrollbar {
+  transition: 0.2s ease;
+  width: 8px; /* 1px wider than Lion. */
+  border-radius: 100px;
+}
+
+.sideBarItem {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding-left: 10px;
+}
+
+.sideBarItem::before {
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  transform: translateX(-20px);
+  content: "";
+  position: aboslute;
+  height: 40px;
+  width: 4px;
+  background-color: #373e47;
+  transition: 0.15s ease;
+}
+
+.sideBarItem.active::before {
+  transform: translateX(-10px);
+}
+.sideBarItem.active.hidden::before {
+  transform: translateX(-20px);
+}
+
+.sideBarFolderName {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.fileIcon,
+.folderIcon svg,
+.folderIcon {
+  height: 30px;
+  width: 30px;
+  display: grid;
+  place-items: center;
+}
+
+.fileIcon svg {
+  height: 25px;
+  width: 25px;
+}
+
+.sidebarPath {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  height: 50px;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.sideBarRootIcon:hover {
+  background-color: #2f353d;
+}
+
+.sideBarRootIcon {
+  cursor: pointer;
+  transition: 0.15s ease;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  border-radius: 3px;
+}
+.pathArrow {
+  height: 30px;
+  width: 30px;
+  display: grid;
+  place-items: center;
+}
+
+.sideBarRootIcon svg,
+.pathArrow svg {
+  width: 20px;
+  height: 20px;
+}
+
+.sideBarRootIcon svg g,
+.pathArrow svg g {
+  fill: rgba(255, 255, 255, 0.863) !important;
+}
+
+.sideBarPathBtn {
+  cursor: pointer;
+  font-size: 20px;
+  color: rgb(223, 223, 223);
+  transition: 0.15s ease;
+}
+
+.sideBarPathBtn:hover {
+  color: #fff;
+}
+
+.currTreePath {
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 20px;
+  color: #fff;
+}
+
+.consoleBtns {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 30px;
+  border-bottom: 1px solid #2f353d;
+  padding: 10px;
+  padding-left: 0;
+}
+
+.consoleBtn {
+  margin-right: 10px;
+  border-radius: 3px;
+  font-size: 19px;
+  background-color: #2f353d;
+  border: 0;
+  color: rgba(255, 255, 255, 0.897);
+  cursor: pointer;
+  outline: none;
+  padding: 3px 8px;
+  transition: 0.2s ease;
+}
+.consoleBtn:hover {
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.26);
+}
+
+.storageHeader {
+  height: 30px;
+  padding: 10px;
+  border-bottom: 1px solid #2f353d;
+}
+
+.activeItemIdencticator {
+  position: absolute;
+  height: 40px;
+  width: 4px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  background-color: #373e47;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.61);
+  transition: 0.15s ease;
+}
+
+.activeItemIdencticator.hidden {
+  transform: translateX(-100%);
+}
+
+.fileNavBar {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.096);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 32000;
+  background-color: #282c34;
+  border-bottom: 1px solid #21252b;
+  height: 30px;
+  position: absolute;
+  width: 99%;
+  padding: 10px 0 10px 1%;
+}
+.rightFileNavBar {
+  display: flex;
+  margin-right: 10px;
+}
+
+.rightFileNavBar .fileNavBarBtn {
+  cursor: pointer;
+  padding: 3px 8px;
+  font-size: 19px;
+  margin: 0 6px;
+  border-radius: 3px;
+  background-color: #21252b;
+  transition: 0.15s ease;
+  color: #dadada;
+}
+
+.rightFileNavBar .fileNavBarBtn:hover {
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.336);
+}
+
+.consoleWrapper {
+  height: 92%;
+  width: 95%;
+  margin: auto;
+}
+.consoleInner {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.196);
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 100%;
+  background-color: #21252b;
+}
+
+.consoleMsg {
+  display: flex;
+  width: 99%;
+  padding: 2px 0 2px 10px;
+}
+
+.consoleMsg.error .consoleMsgPath {
+  color: rgb(255, 57, 57);
+}
+
+.consoleMsg.lineBreak {
+  margin-bottom: 10px;
+}
+
+.consoleMsg .consoleMsgPath {
+  font-family: Consolas !important;
+  margin-right: 7px;
+  font-size: 17px;
+  color: rgb(199, 199, 199);
+}
+
+.consoleMsg .consoleMsgContent {
+  color: #dadada;
+  font-size: 17px;
+  font-family: Consolas !important;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.consoleHeader {
+  display: flex;
+  height: 30px;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 10px;
+  margin-left: 15px;
+  color: #dadada;
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+
+.consoleHeader svg,
+.consoleHeader svg g {
+  cursor: pointer;
+  fill: #dadada;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.runBtn.invinsible {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.sideBarBtn {
+  color: #fff;
+  background-color: #2f353d;
+  border: 0;
+  font-size: 17px;
+  padding: 2px 10px;
+  border-radius: 5px;
+  outline: none;
+  margin: 5px 0px 5px 5px;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.sideBarBtn:first-of-type {
+  margin-top: 20px;
+}
+
+.newDirBtn:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.295);
+}
+
+.newFileContainer {
+  width: 350px;
+  height: 230px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #21252b;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.548);
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 1000;
+  transition: 0.15s ease;
+  opacity: 1;
+}
+.newFileContainer.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.checkBoxesWrapper {
+  display: flex;
+}
+
+.checkBoxContainer {
+  padding: 10px;
+  font-size: 18px;
+}
+
+.checkBoxContainer input {
+  width: 15px;
+  height: 15px;
+}
+.inputWrapper {
+  display: flex;
+  width: 85%;
+  padding: 2px 10px;
+  height: 40px;
+  background-color: #2f353d;
+  border: none;
+  outline: none;
+  color: #fff;
+  margin-top: 25px;
+  border-radius: 6px;
+  position: relative;
+}
+
+.inputWrapper input {
+  width: 100%;
+  background-color: transparent;
+  color: transparent;
+  caret-color: #fff;
+  border: 0;
+  outline: none;
+  height: 100%;
+  font-size: 18px;
+}
+
+.inputWrapper .labels {
+  pointer-events: none;
+  position: absolute;
+  font-size: 18px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.inputWrapper .labels .newFileExt {
+  color: #999;
+}
+.inputWrapper .labels .newFileNameLabel {
+  color: #fff;
+}
+
+.submitBtn {
+  font-size: 18px;
+  background-color: #2f353d;
+  color: rgb(216, 216, 216);
+  border-radius: 4px;
+  padding: 3px 10px;
+  outline: none;
+  border: 0;
+  transition: 0.15s ease;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.submitBtn:hover {
+  color: #fff;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.253);
+}
